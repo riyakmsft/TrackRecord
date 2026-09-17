@@ -27,8 +27,8 @@ const summaryCategories = [
   { title: "Accomplishments", questionIndexes: [0] },
   { title: "Challenges", questionIndexes: [2] },
   { title: "Collaboration", questionIndexes: [4] },
-  { title: "Growth", questionIndexes: [5] },
-  { title: "Impact", questionIndexes: [1, 3] },
+  { title: "Growth", questionIndexes: [3, 5] },
+  { title: "Impact", questionIndexes: [1] },
 ];
 
 function loadCompletedReflections() {
@@ -59,27 +59,52 @@ function populateConnectWeeks(reflections) {
   document.querySelector("#connect-end").value = String(reflections.length - 1);
 }
 
+const ignoredWords = new Set(["a", "an", "and", "are", "as", "at", "be", "by", "for", "from", "in", "into", "is", "it", "of", "on", "or", "that", "the", "this", "to", "was", "with"]);
+
+function answerWords(answer) {
+  return new Set(answer.toLowerCase().replace(/[^a-z0-9\s]/g, " ").split(/\s+/).filter((word) => word.length > 2 && !ignoredWords.has(word)));
+}
+
+function wordSimilarity(first, second) {
+  const firstWords = answerWords(first);
+  const secondWords = answerWords(second);
+  const intersection = [...firstWords].filter((word) => secondWords.has(word)).length;
+  const union = new Set([...firstWords, ...secondWords]).size;
+  return union ? intersection / union : 0;
+}
+
+function buildLocalSummary(reflections) {
+  return Object.fromEntries(summaryCategories.map((category) => {
+    const answers = reflections.flatMap((reflection) => category.questionIndexes.flatMap((questionIndex) => (reflection.answers[questionIndex] || []).filter(Boolean).map((answer) => ({ answer: answer.trim().replace(/\s+/g, " "), week: reflection.week })))).filter((entry) => entry.answer);
+    const groups = [];
+
+    answers.forEach((entry) => {
+      const matchingGroup = groups.find((group) => wordSimilarity(group.representative.answer, entry.answer) >= 0.55);
+      if (matchingGroup) {
+        matchingGroup.entries.push(entry);
+      } else {
+        groups.push({ representative: entry, entries: [entry] });
+      }
+    });
+
+    return [category.title, groups.sort((first, second) => second.entries.length - first.entries.length || second.representative.answer.length - first.representative.answer.length).slice(0, 4).map((group) => {
+      const weekCount = new Set(group.entries.map((entry) => entry.week)).size;
+      return weekCount > 1 ? `${group.representative.answer} (mentioned across ${weekCount} weeks)` : group.representative.answer;
+    })];
+  }));
+}
+
 function renderConnectSummary(reflections, start, end, generatedSummary = null) {
   const selected = reflections.slice(start, end + 1);
+  const localSummary = generatedSummary || buildLocalSummary(selected);
   const summary = summaryCategories.map((category) => {
-    const answers = generatedSummary?.[category.title] || selected.flatMap((reflection) => category.questionIndexes.flatMap((questionIndex) => reflection.answers[questionIndex] || [])).filter(Boolean);
+    const answers = localSummary[category.title] || [];
     return `<section class="connect-summary-item"><h4>${category.title}</h4><ul>${answers.length ? answers.map((answer) => `<li>${escapeHtml(answer)}</li>`).join("") : "<li class=\"skipped-answer\">No notes recorded.</li>"}</ul></section>`;
   }).join("");
   document.querySelector("#connect-range").textContent = selected.length === 1 ? selected[0].week : `${selected[0].week} – ${selected[selected.length - 1].week}`;
   document.querySelector("#connect-summary-list").innerHTML = summary;
   document.querySelector("#dashboard-empty").hidden = true;
   document.querySelector("#connect-summary").hidden = false;
-}
-
-async function generateSummary(reflections, start, end) {
-  const response = await fetch("/api/summarize", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ reflections: reflections.slice(start, end + 1) }),
-  });
-  if (!response.ok) throw new Error("Summary service unavailable");
-  const result = await response.json();
-  return result.summary;
 }
 
 const connectDialog = document.querySelector("#connect-dialog");
@@ -104,17 +129,8 @@ document.querySelector("#connect-form").addEventListener("submit", (event) => {
     return;
   }
   document.querySelector("#connect-end").setCustomValidity("");
-  const generateButton = document.querySelector("#generate-button");
-  generateButton.disabled = true;
-  generateButton.firstChild.textContent = "Generating summary ";
-  generateSummary(availableReflections, start, end)
-    .then((summary) => renderConnectSummary(availableReflections, start, end, summary))
-    .catch(() => renderConnectSummary(availableReflections, start, end))
-    .finally(() => {
-      generateButton.disabled = false;
-      generateButton.firstChild.textContent = "Generate summary ";
-      connectDialog.close();
-    });
+  renderConnectSummary(availableReflections, start, end);
+  connectDialog.close();
 });
 
 document.querySelector("#connect-start").addEventListener("change", () => {

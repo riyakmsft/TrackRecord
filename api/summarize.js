@@ -49,7 +49,7 @@ export default async function handler(request, response) {
           },
           {
             role: "user",
-            content: `Group these reflections into the requested categories. Question order is: projects/tasks, what went well, challenges, what would change, collaboration, new skills. Use projects/tasks for Accomplishments, challenges for Challenges, collaboration for Collaboration, new skills for Growth, and what went well plus what would change for Impact.\n\n${JSON.stringify(reflectionText)}`,
+            content: `Group these reflections into the requested categories. Question order is: projects/tasks, what went well, challenges, what would change, collaboration, new skills. Use projects/tasks for Accomplishments, challenges for Challenges, collaboration for Collaboration, what would change plus new skills for Growth, and what went well for Impact.\n\n${JSON.stringify(reflectionText)}`,
           },
         ],
         text: {
