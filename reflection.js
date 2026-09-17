@@ -7,7 +7,8 @@ const questions = [
   "What new skills did you learn this week?",
 ];
 
-const storageKey = `trackrecord-reflection-${getCurrentWorkWeek()}`;
+const reflectionWeek = new URLSearchParams(window.location.search).get("week") || getCurrentWorkWeek();
+const storageKey = `trackrecord-reflection-${reflectionWeek}`;
 let reflection = loadReflection();
 let currentQuestion = reflection.currentQuestion || 0;
 
@@ -29,7 +30,7 @@ function getCurrentWorkWeek() {
 }
 
 function createEmptyReflection() {
-  return { week: getCurrentWorkWeek(), currentQuestion: 0, answers: questions.map(() => [""]), completed: false };
+  return { week: reflectionWeek, currentQuestion: 0, answers: questions.map(() => [""]), completed: false };
 }
 
 function loadReflection() {
@@ -97,8 +98,15 @@ function escapeHtml(value) {
   return element.innerHTML;
 }
 
-document.querySelector("#reflection-week-dates").textContent = getCurrentWorkWeek();
+document.querySelector("#reflection-week-dates").textContent = reflectionWeek;
 document.querySelector("#begin-button").addEventListener("click", showQuestions);
+document.querySelector("#summary-panel").addEventListener("click", (event) => {
+  if (!event.target.closest("[data-action='edit']")) return;
+  reflection.completed = false;
+  currentQuestion = 0;
+  saveReflection();
+  showQuestions();
+});
 document.querySelector("#answer-list").addEventListener("input", (event) => {
   if (event.target.matches("textarea")) {
     reflection.answers[currentQuestion][Number(event.target.id.split("-")[1])] = event.target.value;

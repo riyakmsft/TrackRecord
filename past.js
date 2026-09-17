@@ -57,10 +57,14 @@ function summaryMarkup(reflection) {
   }).join("");
 }
 
+function editLink(reflection) {
+  return `<a class="quiet-button edit-summary-button" href="reflection.html?week=${encodeURIComponent(reflection.week)}">Edit reflection <span aria-hidden="true">↗</span></a>`;
+}
+
 function renderWeeks() {
   const reflections = loadReflections();
   document.querySelector("#archive-count").textContent = `${String(reflections.length).padStart(2, "0")} ${reflections.length === 1 ? "week" : "weeks"}`;
-  document.querySelector("#week-list").innerHTML = reflections.map((reflection, index) => `<article class="week-item"><button class="week-toggle" type="button" aria-expanded="false" aria-controls="week-summary-${index}"><span class="week-item-number">${String(index + 1).padStart(2, "0")}</span><span class="week-item-date">${escapeHtml(reflection.week)}</span><span class="week-item-state">${reflection.completed ? "Completed" : "In progress"}</span><span class="week-item-arrow" aria-hidden="true">⌄</span></button><div class="week-summary" id="week-summary-${index}" hidden><div class="summary-list">${summaryMarkup(reflection)}</div></div></article>`).join("");
+  document.querySelector("#week-list").innerHTML = reflections.map((reflection, index) => `<article class="week-item"><button class="week-toggle" type="button" aria-expanded="false" aria-controls="week-summary-${index}"><span class="week-item-number">${String(index + 1).padStart(2, "0")}</span><span class="week-item-date">${escapeHtml(reflection.week)}</span><span class="week-item-state">${reflection.completed ? "Completed" : "In progress"}</span><span class="week-item-arrow" aria-hidden="true">⌄</span></button><div class="week-summary" id="week-summary-${index}" hidden><div class="summary-list">${summaryMarkup(reflection)}</div>${editLink(reflection)}</div></article>`).join("");
 }
 
 document.querySelector("#week-list").addEventListener("click", (event) => {
