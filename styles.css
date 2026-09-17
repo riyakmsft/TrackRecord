@@ -103,6 +103,36 @@ h1 em { color: var(--clay); font-family: "Newsreader", serif; font-weight: 500; 
 .lower-note strong { color: var(--deep-green); font-weight: 600; }
 .note-rule { flex: 1; height: 1px; background: #d9d3c7; }
 .note-mark { margin-left: 24px; color: #bd8768; font-size: 29px; transform: rotate(-20deg); }
+.dashboard-section { max-width: 870px; margin: 0 auto; padding: 78px 40px 100px; border-top: 1px solid var(--line); }
+.dashboard-heading { display: flex; align-items: end; justify-content: space-between; gap: 30px; margin-top: 17px; }
+.dashboard-heading h2 { margin: 0; color: var(--deep-green); font-size: clamp(35px, 5vw, 59px); letter-spacing: -.07em; line-height: .98; }
+.dashboard-heading h2 em, .connect-dialog h2 em { color: var(--clay); font-family: "Newsreader", serif; font-weight: 500; }
+.dashboard-description { max-width: 360px; margin: 20px 0 0; color: #718077; font-size: 13px; line-height: 1.75; }
+.dashboard-heading .primary-button { flex: 0 0 auto; }
+.dashboard-empty, .connect-summary { margin-top: 45px; padding: 27px 31px; border: 1px solid rgba(32, 55, 46, .16); background: rgba(247, 243, 232, .72); box-shadow: 0 16px 30px rgba(38, 59, 47, .05); }
+.dashboard-empty p:last-child { max-width: 500px; margin: 0; color: #758178; font-size: 12px; line-height: 1.7; }
+.connect-summary { padding: 30px 35px 35px; }
+.connect-summary-topline { display: flex; align-items: start; justify-content: space-between; gap: 20px; }
+.connect-summary-topline .panel-kicker { margin-bottom: 10px; }
+.connect-summary-topline h3 { margin: 0; color: var(--deep-green); font-family: "DM Mono", monospace; font-size: 12px; font-weight: 500; letter-spacing: -.04em; }
+.connect-summary-list { margin-top: 28px; border-top: 1px solid var(--line); }
+.connect-summary-item { padding: 20px 0; border-bottom: 1px solid var(--line); }
+.connect-summary-item h4 { margin: 0 0 11px; color: #a1785d; font-family: "DM Mono", monospace; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; }
+.connect-summary-item ul { display: grid; gap: 7px; margin: 0; padding-left: 18px; color: #4f6257; font-size: 12px; line-height: 1.65; }
+.connect-summary-item li { padding-left: 3px; }
+.connect-dialog { width: min(560px, calc(100% - 40px)); padding: 31px 35px 34px; border: 1px solid rgba(32, 55, 46, .2); color: var(--ink); background: var(--paper); box-shadow: 0 22px 70px rgba(32, 55, 46, .2); }
+.connect-dialog::backdrop { background: rgba(22, 61, 48, .34); }
+.connect-dialog form { margin: 0; }
+.dialog-topline { display: flex; align-items: start; justify-content: space-between; }
+.dialog-close { padding: 0; border: 0; color: #a1785d; background: transparent; font-size: 25px; line-height: 1; }
+.dialog-close:hover { color: var(--deep-green); }
+.connect-dialog h2 { margin: 15px 0 0; color: var(--deep-green); font-size: clamp(30px, 5vw, 48px); letter-spacing: -.07em; line-height: .98; }
+.dialog-copy { max-width: 380px; margin: 19px 0 28px; color: #758178; font-size: 12px; line-height: 1.7; }
+.connect-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.connect-fields label { color: #829087; font-family: "DM Mono", monospace; font-size: 10px; letter-spacing: .1em; text-transform: uppercase; }
+.connect-fields select { display: block; width: 100%; margin-top: 9px; padding: 12px 10px; border: 1px solid #d5d2c8; border-radius: 2px; color: var(--ink); background: #fffdf8; font: 12px "Manrope", sans-serif; }
+.dialog-actions { display: flex; align-items: center; justify-content: end; gap: 23px; margin-top: 31px; }
+.dialog-actions .primary-button { display: inline-block; }
 
 .reflection-workspace { max-width: 870px; margin: 0 auto; padding: 74px 40px 80px; }
 .reflection-heading { display: flex; align-items: end; justify-content: space-between; gap: 30px; }
@@ -204,6 +234,12 @@ h1 em { color: var(--clay); font-family: "Newsreader", serif; font-weight: 500; 
   .lower-note { margin-top: 25px; padding: 24px; }
   .lower-note p { margin-left: 18px; margin-right: 15px; font-size: 15px; }
   .note-mark { margin-left: 12px; }
+  .dashboard-section { padding: 58px 24px 70px; }
+  .dashboard-heading { display: block; }
+  .dashboard-heading .primary-button { margin-top: 28px; }
+  .dashboard-empty, .connect-summary { padding: 24px 20px; }
+  .connect-dialog { padding: 27px 20px 29px; }
+  .connect-fields { grid-template-columns: 1fr; gap: 18px; }
   .reflection-workspace { padding: 58px 24px 60px; }
   .reflection-heading { display: block; }
   .reflection-heading h1 { margin-bottom: 25px; }

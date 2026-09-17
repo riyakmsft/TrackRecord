@@ -88,7 +88,53 @@
           <span class="note-rule"></span>
           <span class="note-mark" aria-hidden="true">⌁</span>
         </section>
+
+        <section class="dashboard-section" id="dashboard" aria-labelledby="dashboard-title">
+          <div class="eyebrow"><span class="eyebrow-line"></span><span>Connect the dots</span></div>
+          <div class="dashboard-heading">
+            <div>
+              <h2 id="dashboard-title">Your work,<br /><em>in context.</em></h2>
+              <p class="dashboard-description">Bring a stretch of weekly reflections together and see the pattern they make.</p>
+            </div>
+            <button class="primary-button" id="connect-button" type="button">Generate connect <span aria-hidden="true">↗</span></button>
+          </div>
+
+          <div class="dashboard-empty" id="dashboard-empty">
+            <p class="panel-kicker">A wider view</p>
+            <p>Choose the weeks you want to connect. Your summary will gather the details you wrote into one clear record.</p>
+          </div>
+
+          <article class="connect-summary" id="connect-summary" hidden>
+            <div class="connect-summary-topline">
+              <div>
+                <p class="panel-kicker">Summary Since Last Connect</p>
+                <h3 id="connect-range">All available weeks</h3>
+              </div>
+              <span class="summary-check" aria-hidden="true">✓</span>
+            </div>
+            <div class="connect-summary-list" id="connect-summary-list"></div>
+          </article>
+        </section>
       </main>
     </div>
+
+    <dialog class="connect-dialog" id="connect-dialog" aria-labelledby="connect-dialog-title">
+      <form method="dialog" id="connect-form">
+        <div class="dialog-topline">
+          <p class="panel-kicker">Generate a wider view</p>
+          <button class="dialog-close" value="cancel" type="submit" aria-label="Close connect dialog">×</button>
+        </div>
+        <h2 id="connect-dialog-title">Which weeks<br /><em>should connect?</em></h2>
+        <p class="dialog-copy">Select the first and last reflection to include. You can connect any available range.</p>
+        <div class="connect-fields">
+          <label>From <select id="connect-start" required></select></label>
+          <label>Through <select id="connect-end" required></select></label>
+        </div>
+        <div class="dialog-actions">
+          <button class="quiet-button" value="cancel" type="submit">Cancel</button>
+          <button class="primary-button" id="generate-button" value="default" type="submit">Generate summary <span aria-hidden="true">↗</span></button>
+        </div>
+      </form>
+    </dialog>
   </body>
 </html>
