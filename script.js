@@ -23,6 +23,22 @@ function getCurrentWorkWeek() {
 
 document.querySelector("#week-dates").textContent = getCurrentWorkWeek();
 
+const sidebar = document.querySelector(".sidebar");
+const collapseButton = document.querySelector(".collapse-button");
+collapseButton.addEventListener("click", () => {
+  const isCollapsed = sidebar.classList.toggle("collapsed");
+  if (isCollapsed) {
+    sidebar.style.setProperty("flex-basis", "72px", "important");
+    sidebar.style.setProperty("width", "72px", "important");
+  } else {
+    sidebar.style.removeProperty("flex-basis");
+    sidebar.style.removeProperty("width");
+  }
+  collapseButton.setAttribute("aria-expanded", String(!isCollapsed));
+  collapseButton.setAttribute("aria-label", isCollapsed ? "Expand navigation" : "Collapse navigation");
+  collapseButton.querySelector("span").textContent = isCollapsed ? "›" : "‹";
+});
+
 const summaryCategories = [
   { title: "Accomplishments", questionIndexes: [0] },
   { title: "Challenges", questionIndexes: [2] },
